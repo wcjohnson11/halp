@@ -84,11 +84,23 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     }
     
+//    func getDistance() {
+//        self.distance = [
+//            []
+//        ]
+//    }
+//   
+//    func getDeals() {
+//        self.deals = [
+//            ["name":]
+//        ]
+//    }
+    
     func getSortingMethods() {
         self.sortingMethods = [
-            ["label" : "Best Match", "code": "0"],
-            ["label" : "Distance", "code": "1"],
-            ["label" : "Highest Rated", "code": "2"]
+            ["name" : "Best Match", "code": "0"],
+            ["name" : "Distance", "code": "1"],
+            ["name" : "Highest Rated", "code": "2"]
         ]
     }
     

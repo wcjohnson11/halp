@@ -12,6 +12,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
 
     var businesses: [Business]!
     var searchActive: Bool = false
+    var filteredData: [Business]!
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -32,6 +33,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
 
         Business.searchWithTerm("Restaurants", sort: .Distance, categories: [], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
+            self.filteredData = businesses
             self.tableView.reloadData()
         }
     }
@@ -44,23 +46,32 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     // Update Logic
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return businesses?.count ?? 0
+        return filteredData?.count ?? 0
     }
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
-        cell.business = businesses[indexPath.row]
+        cell.business = filteredData[indexPath.row]
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         return cell
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredData = searchText.isEmpty ? businesses : businesses.filter({(business: Business) -> Bool in
+            return business.name!.rangeOfString(searchText, options: .CaseInsensitiveSearch) != nil
+        })
+        tableView.reloadData()
     }
     
     // Update the table based on Filter Selections
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         var categories = filters["categories"] as? [String]
-        Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: nil) {
+        Business.searchWithTerm("Restaurants", sort: nil, categories: categories, deals: true) {
             (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
+            self.filteredData = businesses
+            print(categories!)
             self.tableView.reloadData()
         }
     }
