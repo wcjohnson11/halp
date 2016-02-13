@@ -45,6 +45,7 @@ class Business: NSObject {
         }
         self.address = address
         
+        
         let categoriesArray = dictionary["categories"] as? [[String]]
         if categoriesArray != nil {
             var categoryNames = [String]()

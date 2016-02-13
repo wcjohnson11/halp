@@ -17,12 +17,18 @@ class SwitchCell: UITableViewCell {
     @IBOutlet weak var switchLabel: UILabel!
     @IBOutlet weak var onSwitch: UISwitch!
     
+    var category: Category! {
+        didSet {
+//            switchLabel.text = category!
+        }
+    }
+    
     weak var delegate: SwitchCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
+        self.selectionStyle = UITableViewCellSelectionStyle.None
         onSwitch.addTarget(self, action: "switchValueChanged", forControlEvents: UIControlEvents.ValueChanged)
     }
 
