@@ -1,6 +1,6 @@
-# Project 2 - *Name of App Here*
+# Project 2 - *Halp*
 
-**Name of your app** is a Yelp search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
+**Halp** is a Yelp search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
 
 Time spent: **X** hours spent in total
 
@@ -82,7 +82,7 @@ Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusio
         print(business.address!)
     }
 }
-```
+``` 
 
 Describe any challenges encountered while building the app.
 
