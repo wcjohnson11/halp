@@ -8,13 +8,19 @@
 
 import UIKit
 
-class FiltersViewController: UIViewController {
+class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
+    
+    var categories: [[String:String]]!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        // get categories
         
         // Do any additional setup after loading the view.
     }
@@ -31,6 +37,19 @@ class FiltersViewController: UIViewController {
     @IBAction func onSearchBUtton(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return categories?.count ?? 0
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
+        
+        cell.switchLabel.text = categories[indexPath.row]["name"]
+        
+        return cell
+    }
+    
     
 
     /*

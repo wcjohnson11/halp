@@ -8,9 +8,10 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
     var businesses: [Business]!
+    var searchActive: Bool = false
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -30,6 +31,12 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
                 print(business.address!)
             }
         })
+        
+        let searchBar = UISearchBar()
+        searchBar.sizeToFit()
+        navigationItem.titleView = searchBar
+        searchBar.delegate = self
+        searchBar.placeholder = "Halp!"
 
 /* Example of Yelp search with more search options specified
         Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
