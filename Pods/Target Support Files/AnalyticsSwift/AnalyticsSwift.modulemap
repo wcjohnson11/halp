@@ -1,0 +1,6 @@
+framework module AnalyticsSwift {
+  umbrella header "AnalyticsSwift-umbrella.h"
+
+  export *
+  module * { export * }
+}

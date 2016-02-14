@@ -14,14 +14,10 @@ import UIKit
 
 class SwitchCell: UITableViewCell {
 
+    @IBOutlet weak var switchView: UIView!
     @IBOutlet weak var switchLabel: UILabel!
     @IBOutlet weak var onSwitch: UISwitch!
     
-    var category: Category! {
-        didSet {
-//            switchLabel.text = category!
-        }
-    }
     
     weak var delegate: SwitchCellDelegate?
     
@@ -30,6 +26,10 @@ class SwitchCell: UITableViewCell {
         // Initialization code
         self.selectionStyle = UITableViewCellSelectionStyle.None
         onSwitch.addTarget(self, action: "switchValueChanged", forControlEvents: UIControlEvents.ValueChanged)
+        switchView.layer.cornerRadius = 3
+        switchView.layer.masksToBounds = true
+        switchView.layer.borderWidth = 1
+        switchView.layer.borderColor = UIColor.lightGrayColor().CGColor
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
