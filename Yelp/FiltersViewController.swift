@@ -59,12 +59,31 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 selectedCategories.append(categories[row]["code"]!)
             }
         }
-        
         if selectedCategories.count > 0 {
             filters!.selectedCategories = selectedCategories
         }
-        
         delegate?.filtersViewController?(self, didUpdateFilters: filters!)
+    }
+    
+    func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
+        let indexPath = tableView.indexPathForCell(switchCell)!
+        switchStates[indexPath.row] = value
+    }
+    // Table setup
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerInSection = UILabel()
+        headerInSection.backgroundColor = UIColor.lightGrayColor()
+        headerInSection.text = FilterOptions.strings[section]
+        headerInSection.textAlignment = .Center
+        return headerInSection
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return FilterOptions.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -78,93 +97,63 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         case .Distance:
             return distanceExpanded ? DistanceFilters.count : 1
         }
-        
     }
 
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let section = indexPath.section
-        let filterType = FilterOptions.values[indexPath.section]
+        let filterType = FilterOptions.values[section]
+        let row = indexPath.row
         if filterType == .Deals || filterType == .Categories {
             let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
-            if FilterOptions.values[section] == .Deals {
-                cell.switchLabel.text = "View Deals"
+            if filterType == .Deals {
+                cell.switchLabel.text = "Filter for deals"
             } else {
-                cell.switchLabel.text = categories[indexPath.row]["name"]
-                cell.onSwitch.on = switchStates[indexPath.row] ?? false
-
+                cell.switchLabel.text = categories[row]["name"]
+                cell.onSwitch.on = switchStates[row] ?? false
             }
             cell.delegate = self
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("DropDownCell", forIndexPath: indexPath) as! DropDownCell
-            switch FilterOptions.values[section] {
-            case .Sort:
+            if filterType == .Sort {
                 if sortExpanded == true {
-                    cell.dropdownLabel.text = SortFilters.strings[indexPath.row]
+                    cell.dropdownLabel.text = SortFilters.strings[row]
                 } else {
                     let newIndex = SortFilters.values.indexOf(filters!.sort!)
                     cell.dropdownLabel.text = SortFilters.strings[newIndex!]
                 }
-            case .Distance:
+            }
+            if filterType == .Distance {
                 if distanceExpanded == true {
-                    cell.dropdownLabel.text = DistanceFilters.strings[indexPath.row]
+                    cell.dropdownLabel.text = DistanceFilters.strings[row]
                 } else {
                     let newIndex = DistanceFilters.values.indexOf(filters!.distance!)
                     cell.dropdownLabel.text = DistanceFilters.strings[newIndex!]
                 }
-            default:
-                print("Something went wrong")
             }
             return cell
         }
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return FilterOptions.count
-    }
-    
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
-    }
-    
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerInSection = UILabel()
-//        headerInSection.backgroundColor = UIColor.grayColor()
-        headerInSection.text = FilterOptions.strings[section]
-        headerInSection.textAlignment = .Center
-        return headerInSection
-    }
-    
-    func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
-        let indexPath = tableView.indexPathForCell(switchCell)!
-        switchStates[indexPath.row] = value
-    }
-    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let filter = FilterOptions.values[indexPath.section]
+        let filter = FilterOptions.strings[indexPath.section]
         let section = indexPath.section
         let row = indexPath.row
-        switch filter {
-        case .Distance:
-            if (distanceExpanded) {
-                print(row, section)
+        if filter == "Distance" {
+            if distanceExpanded{
                 filters?.distance = DistanceFilters.values[row]
             }
             distanceExpanded = !distanceExpanded
             tableView.reloadData()
-            tableView.reloadSections(NSIndexSet(index: indexPath.section), withRowAnimation: .Automatic)
-            break
-        case .Sort:
-            if (sortExpanded) {
+            tableView.reloadSections(NSIndexSet(index: section), withRowAnimation: .Fade)
+        }
+        if filter == "Sort" {
+            if sortExpanded {
                 filters?.sort = SortFilters.values[row]
             }
             sortExpanded = !sortExpanded
             tableView.reloadData()
-            tableView.reloadSections(NSIndexSet(index: indexPath.section), withRowAnimation: .Automatic)
-            break
-        default:
-            return
+            tableView.reloadSections(NSIndexSet(index: section), withRowAnimation: .Fade)
         }
     }
     

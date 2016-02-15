@@ -26,7 +26,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         definesPresentationContext = true
 
 
-        Business.searchWithTerm("Restaurants", sort: .Distance, categories: [], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm("Restaurants", distance: nil, sort: .Distance, categories: [], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.filteredBusinesses = businesses
             self.tableView.reloadData()
@@ -54,10 +54,10 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: Filters) {
         let categories = filters.selectedCategories
         let deals = filters.deals
-        let distance = filters.distance
+        let distance = filters.getDistance()
         let sort = YelpSortMode(rawValue: filters.getSortMode())
         
-        Business.searchWithTerm("Restaurants", sort: sort, categories: categories, deals: deals) {
+        Business.searchWithTerm("Restaurants", distance: distance, sort: sort, categories: categories, deals: deals) {
             (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.filteredBusinesses = businesses
@@ -95,9 +95,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         let navigationController = segue.destinationViewController as! UINavigationController
         let filtersViewController = navigationController.topViewController as! FiltersViewController
         filtersViewController.delegate = self
-        if filters != nil {
-            filtersViewController.filters = filters!
-        }
     }
 
 }

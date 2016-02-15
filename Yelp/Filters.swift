@@ -40,9 +40,9 @@ enum CategoryFilters {
 
 enum DistanceFilters:  Int {
     case Auto = 0
-    case One = 1
-    case Five = 5
-    case Twenty = 20
+    case One = 1609
+    case Five = 8045
+    case Twenty = 32180
     
     static let count = 3
     static let strings = ["Auto", "1 Mile", "5 Miles", "20 Miles"]
@@ -73,7 +73,11 @@ class Filters: NSObject {
         sort = .BestMatch
         distance = .Auto
     }
-    func getSortMode() ->Int {
+    func getSortMode() -> Int {
         return SortFilters.values.indexOf(self.sort!)!
+    }
+    
+    func getDistance() -> Int {
+        return DistanceFilters.values.indexOf(self.distance!)!
     }
 }
