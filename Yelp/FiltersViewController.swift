@@ -23,7 +23,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     var sortingMethods: [[String:String]]!
     var switchStates = [Int:Bool]()
     var filters: Filters?
-    
     var distanceExpanded: Bool = false
     var sortExpanded: Bool = false
 
@@ -32,13 +31,9 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if filters != nil {
-            print(filters!.categories)
-        }
         tableView.delegate = self
         tableView.dataSource = self
-        self.filters = Filters()
+        filters = Filters.sharedInstance
         self.categories = filters!.categories
     }
     
@@ -107,6 +102,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
             if filterType == .Deals {
                 cell.switchLabel.text = "Filter for deals"
+                cell.onSwitch.on = filters!.deals!
             } else {
                 cell.switchLabel.text = categories[row]["name"]
                 cell.onSwitch.on = switchStates[row] ?? false
@@ -139,6 +135,9 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         let filter = FilterOptions.strings[indexPath.section]
         let section = indexPath.section
         let row = indexPath.row
+        if filter == "Deals" {
+           filters!.deals! = !(filters!.deals!)
+        }
         if filter == "Distance" {
             if distanceExpanded{
                 filters?.distance = DistanceFilters.values[row]

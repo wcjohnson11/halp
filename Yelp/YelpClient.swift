@@ -10,6 +10,7 @@ import UIKit
 
 import AFNetworking
 import BDBOAuth1Manager
+import MBProgressHUD
 
 // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
 let yelpConsumerKey = "mL8ElfdTnUJlWQlWXCtvkg"
@@ -80,11 +81,13 @@ class YelpClient: BDBOAuth1RequestOperationManager {
 //        print(parameters)
         
         return self.GET("search", parameters: parameters, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+//            MBProgressHUD.showHUDAddedTo(BusinessesViewController.tableView, animated: true)
             let dictionaries = response["businesses"] as? [NSDictionary]
             if dictionaries != nil {
                 completion(Business.businesses(array: dictionaries!), nil)
             }
             }, failure: { (operation: AFHTTPRequestOperation?, error: NSError!) -> Void in
+//                MBProgressHUD.hideHUDForView(self.view, animated: true)
                 completion(nil, error)
         })!
     }

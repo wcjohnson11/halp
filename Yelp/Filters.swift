@@ -60,6 +60,7 @@ enum SortFilters: Int {
 }
 
 class Filters: NSObject {
+    static let sharedInstance = Filters()
     var categories: [[String: String]]?
     var deals: Bool?
     var distance: DistanceFilters?
